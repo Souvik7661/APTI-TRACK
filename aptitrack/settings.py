@@ -63,9 +63,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'aptitrack.wsgi.application'
 
 # Database
+if os.environ.get('VERCEL') == '1':
+    # Vercel's filesystem is read-only, except for /tmp
+    default_db = 'sqlite:////tmp/db.sqlite3'
+else:
+    default_db = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=os.environ.get('DATABASE_URL', os.environ.get('POSTGRES_URL', default_db)),
         conn_max_age=600
     )
 }

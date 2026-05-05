@@ -90,21 +90,12 @@ def setup_view(request):
     except Exception as e:
         admin_output = f"Admin creation error: {e}"
 
-    html = f"""
-    <html><head><title>AptiTrack Setup</title>
-    <style>body{{background:#030303;color:#fff;font-family:monospace;padding:40px;}}
-    pre{{background:#111;padding:20px;border-radius:8px;overflow:auto;}}
-    a{{color:#8b5cf6;font-size:18px;}}</style></head>
-    <body>
-    <h1>⚡ AptiTrack Setup Complete</h1>
-    <h3>Migration Output:</h3><pre>{migrate_output}</pre>
-    <h3>Seed Data Output:</h3><pre>{seed_output}</pre>
-    <h3>Admin Account:</h3><pre>{admin_output}</pre>
-    <br><a href="/">→ Go to Homepage</a>
-    </body></html>
-    """
-    from django.http import HttpResponse
-    return HttpResponse(html)
+    context = {
+        'migrate_output': migrate_output,
+        'seed_output': seed_output,
+        'admin_output': admin_output,
+    }
+    return render(request, 'core/setup.html', context)
 
 
 # ─── Authentication ───────────────────────────────────────────

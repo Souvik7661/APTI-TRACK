@@ -1,0 +1,180 @@
+{% extends "core/base.html" %}
+{% block title %}System Setup & Initialization{% endblock %}
+
+{% block extra_head %}
+<style>
+  .setup-container {
+    max-width: 900px;
+    margin: 4rem auto;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .setup-card {
+    background: rgba(20, 20, 25, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .setup-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  }
+
+  .setup-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .setup-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .setup-header p {
+    color: #9ca3af;
+    font-size: 1.1rem;
+  }
+
+  .log-section {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .log-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .log-header {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .log-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .icon-blue { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+  .icon-purple { background: rgba(139, 92, 246, 0.1); color: #a78bfa; }
+  .icon-green { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+
+  .log-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #f3f4f6;
+  }
+
+  .log-body {
+    padding: 1.5rem;
+  }
+
+  .log-output {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: #a78bfa;
+    white-space: pre-wrap;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .error-text {
+    color: #ef4444;
+  }
+
+  .success-text {
+    color: #10b981;
+  }
+
+  .action-container {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="setup-container">
+  <div class="setup-card">
+    <div class="setup-header">
+      <h1>System Initialization Complete</h1>
+      <p>Your AptiTrack environment has been configured and deployed.</p>
+    </div>
+
+    <div class="log-section">
+      <div class="log-header">
+        <div class="log-icon icon-blue">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+        </div>
+        <div class="log-title">Database Migrations</div>
+      </div>
+      <div class="log-body">
+        <pre class="log-output {% if 'error' in migrate_output|lower or 'unable to open' in migrate_output|lower %}error-text{% else %}success-text{% endif %}">{{ migrate_output }}</pre>
+      </div>
+    </div>
+
+    <div class="log-section">
+      <div class="log-header">
+        <div class="log-icon icon-purple">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+        <div class="log-title">Seed Data Injection</div>
+      </div>
+      <div class="log-body">
+        <pre class="log-output {% if 'error' in seed_output|lower or 'unable to open' in seed_output|lower %}error-text{% else %}success-text{% endif %}">{{ seed_output }}</pre>
+      </div>
+    </div>
+
+    <div class="log-section">
+      <div class="log-header">
+        <div class="log-icon icon-green">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        </div>
+        <div class="log-title">Admin Configuration</div>
+      </div>
+      <div class="log-body">
+        <pre class="log-output {% if 'error' in admin_output|lower or 'unable to open' in admin_output|lower %}error-text{% else %}success-text{% endif %}">{{ admin_output }}</pre>
+      </div>
+    </div>
+
+    <div class="action-container">
+      <a href="{% url 'home' %}" class="btn-shiny" style="display:inline-block; text-decoration:none;">
+        <div class="btn-shiny-inner">Enter Platform</div>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
