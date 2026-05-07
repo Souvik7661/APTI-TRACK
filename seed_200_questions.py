@@ -26,11 +26,11 @@ def create_seed_data():
     difficulties = ['easy', 'medium', 'hard']
     correct_options = ['a', 'b', 'c', 'd']
 
-    print(f"Creating 200 questions...")
+    print(f"Creating 300 questions...")
     
     questions_to_create = []
     
-    for i in range(200):
+    for i in range(300):
         category = random.choice(categories)
         difficulty = random.choice(difficulties)
         correct_answer = random.choice(correct_options)
